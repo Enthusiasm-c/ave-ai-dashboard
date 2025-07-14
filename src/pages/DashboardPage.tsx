@@ -6,24 +6,24 @@ export const DashboardPage = () => {
 
   const handleTestAlert = () => {
     hapticFeedback();
-    showAlert('Dashboard функциональность будет добавлена в следующих задачах! 📊');
+    showAlert('Dashboard functionality will be added in the next tasks! 📊');
   };
 
   return (
     <div className="dashboard">
       <div className="dashboard-header">
-        <h1>📊 Дашборд</h1>
-        <p>Добро пожаловать в панель управления Ave AI</p>
+        <h1>📊 Dashboard</h1>
+        <p>Welcome to Ave AI Control Panel</p>
       </div>
 
       <div className="dashboard-content">
         <div className="kpi-preview">
-          <h2>KPI Метрики</h2>
+          <h2>KPI Metrics</h2>
           <div className="kpi-grid">
             <div className="kpi-card">
               <div className="kpi-icon">💰</div>
               <div className="kpi-info">
-                <h3>Выручка</h3>
+                <h3>Revenue</h3>
                 <div className="kpi-value">Rp 1,500,000</div>
                 <div className="kpi-trend">📈 +12.5%</div>
               </div>
@@ -32,7 +32,7 @@ export const DashboardPage = () => {
             <div className="kpi-card">
               <div className="kpi-icon">🛒</div>
               <div className="kpi-info">
-                <h3>Заказы</h3>
+                <h3>Orders</h3>
                 <div className="kpi-value">89</div>
                 <div className="kpi-trend">📈 +8.2%</div>
               </div>
@@ -41,7 +41,7 @@ export const DashboardPage = () => {
             <div className="kpi-card">
               <div className="kpi-icon">💳</div>
               <div className="kpi-info">
-                <h3>Средний чек</h3>
+                <h3>Average Check</h3>
                 <div className="kpi-value">Rp 16,854</div>
                 <div className="kpi-trend">📈 +3.8%</div>
               </div>
@@ -50,17 +50,17 @@ export const DashboardPage = () => {
         </div>
 
         <div className="coming-soon">
-          <h3>🚧 В разработке</h3>
-          <p>Полная функциональность дашборда будет добавлена в следующих задачах:</p>
+          <h3>🚧 Under Development</h3>
+          <p>Full dashboard functionality will be added in the next tasks:</p>
           <ul>
-            <li>📊 Интерактивные графики</li>
-            <li>📈 ABC анализ меню</li>
-            <li>🤖 AI рекомендации</li>
-            <li>📋 Детальные отчеты</li>
+            <li>📊 Interactive charts</li>
+            <li>📈 Menu ABC analysis</li>
+            <li>🤖 AI recommendations</li>
+            <li>📋 Detailed reports</li>
           </ul>
           
           <button onClick={handleTestAlert} className="primary-button">
-            Тест функций
+            Test Features
           </button>
         </div>
       </div>

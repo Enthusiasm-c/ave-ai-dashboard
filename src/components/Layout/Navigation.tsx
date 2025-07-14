@@ -14,19 +14,19 @@ export const Navigation = ({ currentPath }: NavigationProps) => {
     {
       path: '/dashboard',
       icon: Home,
-      label: 'Дашборд',
+      label: 'Dashboard',
       isActive: currentPath === '/dashboard'
     },
     {
       path: '/analytics',
       icon: BarChart3,
-      label: 'Аналитика',
+      label: 'Analytics',
       isActive: currentPath === '/analytics'
     },
     {
       path: '/settings',
       icon: Settings,
-      label: 'Настройки',
+      label: 'Settings',
       isActive: currentPath === '/settings'
     }
   ];

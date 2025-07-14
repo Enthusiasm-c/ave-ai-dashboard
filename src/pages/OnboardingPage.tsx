@@ -10,8 +10,8 @@ export const OnboardingPage = () => {
 
   const handleGetStarted = () => {
     hapticFeedback();
-    showAlert('Добро пожаловать в Ave AI! 🎉');
-    // Имитация проверки подключения
+    showAlert('Welcome to Ave AI! 🎉');
+    // Simulate connection check
     setTimeout(() => {
       setIsConnected(true);
       navigate('/dashboard');
@@ -20,7 +20,7 @@ export const OnboardingPage = () => {
 
   const handleConnectPOS = () => {
     hapticFeedback();
-    showAlert('Функция подключения POS будет добавлена в следующих задачах');
+    showAlert('POS connection feature will be added in the next tasks');
   };
 
   return (
@@ -29,17 +29,17 @@ export const OnboardingPage = () => {
         <div className="welcome-section">
           <div className="welcome-icon">🏪</div>
           <h1 className="welcome-title">
-            Добро пожаловать в Ave AI!
+            Welcome to Ave AI!
           </h1>
           <p className="welcome-subtitle">
-            Умная аналитика для вашего ресторана
+            Smart analytics for your restaurant
           </p>
         </div>
 
         {user && (
           <div className="user-welcome">
-            <p>Привет, <strong>{user.first_name}</strong>!</p>
-            <p>Готовы начать аналитику ресторана?</p>
+            <p>Hello, <strong>{user.first_name}</strong>!</p>
+            <p>Ready to start restaurant analytics?</p>
           </div>
         )}
 
@@ -47,24 +47,24 @@ export const OnboardingPage = () => {
           <div className="step">
             <div className="step-number">1</div>
             <div className="step-content">
-              <h3>Подключите POS систему</h3>
-              <p>Syrve, Poster или другую систему</p>
+              <h3>Connect POS System</h3>
+              <p>Syrve, Poster or other systems</p>
             </div>
           </div>
 
           <div className="step">
             <div className="step-number">2</div>
             <div className="step-content">
-              <h3>Настройте параметры</h3>
-              <p>Количество мест, часы работы, расходы</p>
+              <h3>Configure Settings</h3>
+              <p>Seats, working hours, expenses</p>
             </div>
           </div>
 
           <div className="step">
             <div className="step-number">3</div>
             <div className="step-content">
-              <h3>Получайте insights</h3>
-              <p>AI анализ и рекомендации для роста</p>
+              <h3>Get Insights</h3>
+              <p>AI analysis and growth recommendations</p>
             </div>
           </div>
         </div>
@@ -74,35 +74,35 @@ export const OnboardingPage = () => {
             onClick={handleConnectPOS}
             className="secondary-button"
           >
-            🔗 Подключить POS
+            🔗 Connect POS
           </button>
           
           <button 
             onClick={handleGetStarted}
             className="primary-button"
           >
-            🚀 Начать работу
+            🚀 Get Started
           </button>
         </div>
 
         <div className="features-preview">
-          <h3>Что вас ждет:</h3>
+          <h3>What awaits you:</h3>
           <div className="features-grid">
             <div className="feature">
               <span className="feature-icon">📊</span>
-              <span>Ежедневная аналитика</span>
+              <span>Daily analytics</span>
             </div>
             <div className="feature">
               <span className="feature-icon">🤖</span>
-              <span>AI рекомендации</span>
+              <span>AI recommendations</span>
             </div>
             <div className="feature">
               <span className="feature-icon">📈</span>
-              <span>ABC анализ меню</span>
+              <span>Menu ABC analysis</span>
             </div>
             <div className="feature">
               <span className="feature-icon">💰</span>
-              <span>Отчеты по прибыли</span>
+              <span>Profit reports</span>
             </div>
           </div>
         </div>

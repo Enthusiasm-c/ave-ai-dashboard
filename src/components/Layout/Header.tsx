@@ -17,7 +17,7 @@ export const Header = ({ user }: HeaderProps) => {
         {user && (
           <div className="header-user">
             <span className="user-greeting">
-              Привет, <strong>{user.first_name}</strong>!
+              Hello, <strong>{user.first_name}</strong>!
             </span>
             {user.username && (
               <span className="user-handle">@{user.username}</span>

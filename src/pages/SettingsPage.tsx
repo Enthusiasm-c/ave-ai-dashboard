@@ -6,52 +6,52 @@ export const SettingsPage = () => {
 
   const handleSettingClick = (setting: string) => {
     hapticFeedback();
-    showAlert(`Настройка "${setting}" будет добавлена в следующих задачах!`);
+    showAlert(`"${setting}" setting will be added in the next tasks!`);
   };
 
   return (
     <div className="settings">
       <div className="settings-header">
-        <h1>⚙️ Настройки</h1>
-        <p>Конфигурация ресторана и приложения</p>
+        <h1>⚙️ Settings</h1>
+        <p>Restaurant and application configuration</p>
       </div>
 
       <div className="settings-content">
         <div className="settings-section">
-          <h2>🏪 Ресторан</h2>
+          <h2>🏪 Restaurant</h2>
           <div className="settings-list">
             <button 
               className="setting-item"
-              onClick={() => handleSettingClick('Основная информация')}
+              onClick={() => handleSettingClick('Basic Information')}
             >
               <span className="setting-icon">🏷️</span>
               <div className="setting-info">
-                <h3>Основная информация</h3>
-                <p>Название, адрес, контакты</p>
+                <h3>Basic Information</h3>
+                <p>Name, address, contacts</p>
               </div>
               <span className="setting-arrow">›</span>
             </button>
 
             <button 
               className="setting-item"
-              onClick={() => handleSettingClick('Часы работы')}
+              onClick={() => handleSettingClick('Working Hours')}
             >
               <span className="setting-icon">🕐</span>
               <div className="setting-info">
-                <h3>Часы работы</h3>
-                <p>График работы ресторана</p>
+                <h3>Working Hours</h3>
+                <p>Restaurant schedule</p>
               </div>
               <span className="setting-arrow">›</span>
             </button>
 
             <button 
               className="setting-item"
-              onClick={() => handleSettingClick('Количество мест')}
+              onClick={() => handleSettingClick('Seating Capacity')}
             >
               <span className="setting-icon">🪑</span>
               <div className="setting-info">
-                <h3>Количество мест</h3>
-                <p>Вместимость ресторана</p>
+                <h3>Seating Capacity</h3>
+                <p>Restaurant capacity</p>
               </div>
               <span className="setting-arrow">›</span>
             </button>
@@ -59,40 +59,40 @@ export const SettingsPage = () => {
         </div>
 
         <div className="settings-section">
-          <h2>💰 Финансы</h2>
+          <h2>💰 Finance</h2>
           <div className="settings-list">
             <button 
               className="setting-item"
-              onClick={() => handleSettingClick('ФОТ')}
+              onClick={() => handleSettingClick('Payroll')}
             >
               <span className="setting-icon">👥</span>
               <div className="setting-info">
-                <h3>Фонд оплаты труда</h3>
-                <p>Месячные расходы на персонал</p>
+                <h3>Payroll Fund</h3>
+                <p>Monthly staff expenses</p>
               </div>
               <span className="setting-arrow">›</span>
             </button>
 
             <button 
               className="setting-item"
-              onClick={() => handleSettingClick('Аренда')}
+              onClick={() => handleSettingClick('Rent')}
             >
               <span className="setting-icon">🏢</span>
               <div className="setting-info">
-                <h3>Аренда</h3>
-                <p>Стоимость аренды помещения</p>
+                <h3>Rent</h3>
+                <p>Monthly rent cost</p>
               </div>
               <span className="setting-arrow">›</span>
             </button>
 
             <button 
               className="setting-item"
-              onClick={() => handleSettingClick('Коммунальные услуги')}
+              onClick={() => handleSettingClick('Utilities')}
             >
               <span className="setting-icon">💡</span>
               <div className="setting-info">
-                <h3>Коммунальные услуги</h3>
-                <p>Электричество, вода, интернет</p>
+                <h3>Utilities</h3>
+                <p>Electricity, water, internet</p>
               </div>
               <span className="setting-arrow">›</span>
             </button>
@@ -100,16 +100,16 @@ export const SettingsPage = () => {
         </div>
 
         <div className="settings-section">
-          <h2>🔗 Интеграции</h2>
+          <h2>🔗 Integrations</h2>
           <div className="settings-list">
             <button 
               className="setting-item"
-              onClick={() => handleSettingClick('POS система')}
+              onClick={() => handleSettingClick('POS System')}
             >
               <span className="setting-icon">🏪</span>
               <div className="setting-info">
-                <h3>POS система</h3>
-                <p>Подключение Syrve, Poster</p>
+                <h3>POS System</h3>
+                <p>Connect Syrve, Poster</p>
               </div>
               <span className="setting-arrow">›</span>
             </button>
@@ -118,7 +118,7 @@ export const SettingsPage = () => {
 
         {user && (
           <div className="settings-section">
-            <h2>👤 Аккаунт</h2>
+            <h2>👤 Account</h2>
             <div className="user-info-card">
               <div className="user-avatar">
                 {user.first_name.charAt(0).toUpperCase()}

@@ -13,7 +13,7 @@ function App() {
     return (
       <div className="loading">
         <div className="spinner"></div>
-        <p>Инициализация...</p>
+        <p>Initializing...</p>
       </div>
     );
   }
