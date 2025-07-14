@@ -37,7 +37,8 @@
   },
   "overrides": {
     "@telegram-apps/telegram-ui": {
-      "react": "$react"
+      "react": "$react",
+      "react-dom": "$react-dom"
     }
   }
 }
