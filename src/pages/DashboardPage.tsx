@@ -1,18 +1,39 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTelegram } from '@/hooks/useTelegram';
+import { useDashboard, usePeriodStats, useInsights, useDataRefresh } from '@/hooks/useApi';
 import { KPICard } from '@/components/Dashboard/KPICard';
+import { formatCurrency, formatPercentage, getTrendDirection } from '@/services/api';
 import './DashboardPage.css';
 
 export const DashboardPage = () => {
   const { showAlert, hapticFeedback } = useTelegram();
-  const [selectedPeriod, setSelectedPeriod] = useState('today');
+  const [selectedPeriod, setSelectedPeriod] = useState<'today' | 'week' | 'month'>('today');
+  
+  // Fetch data
+  const { data: dashboardData, loading: dashboardLoading, error: dashboardError } = useDashboard();
+  const { data: periodData, loading: periodLoading } = usePeriodStats(selectedPeriod);
+  const { data: insightsData, loading: insightsLoading } = useInsights();
+  const { refresh, refreshing } = useDataRefresh();
+
+  // Handle refresh
+  const handleRefresh = async () => {
+    hapticFeedback();
+    const success = await refresh();
+    if (success) {
+      showAlert('Data refreshed successfully! 🔄');
+      // Reload the page to fetch new data
+      window.location.reload();
+    } else {
+      showAlert('Failed to refresh data. Please try again.');
+    }
+  };
 
   const handleCardClick = (metric: string) => {
     hapticFeedback();
-    showAlert(`Detailed ${metric} analytics will be available soon!`);
+    showAlert(`Detailed ${metric} analytics coming soon!`);
   };
 
-  const handlePeriodChange = (period: string) => {
+  const handlePeriodChange = (period: 'today' | 'week' | 'month') => {
     hapticFeedback();
     setSelectedPeriod(period);
   };
@@ -22,6 +43,45 @@ export const DashboardPage = () => {
     showAlert(`${action} feature coming soon!`);
   };
 
+  // Loading state
+  if (dashboardLoading) {
+    return (
+      <div className="dashboard">
+        <div className="loading">
+          <div className="spinner"></div>
+          <p>Loading dashboard data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (dashboardError) {
+    return (
+      <div className="dashboard">
+        <div className="error-state">
+          <h2>⚠️ Unable to load data</h2>
+          <p>{dashboardError.message}</p>
+          <button className="primary-button" onClick={() => window.location.reload()}>
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // No data state
+  if (!dashboardData) {
+    return (
+      <div className="dashboard">
+        <div className="error-state">
+          <h2>📊 No data available</h2>
+          <p>Connect your POS system to start seeing analytics</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="dashboard">
       <div className="dashboard-inner">
@@ -29,6 +89,18 @@ export const DashboardPage = () => {
         <div className="dashboard-header">
           <h1>📊 Dashboard</h1>
           <p>Real-time insights for your restaurant</p>
+        </div>
+
+        {/* Refresh Button */}
+        <div style={{ marginBottom: '1rem', textAlign: 'right' }}>
+          <button 
+            className="secondary-button"
+            onClick={handleRefresh}
+            disabled={refreshing}
+            style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}
+          >
+            {refreshing ? 'Refreshing...' : '🔄 Refresh Data'}
+          </button>
         </div>
 
         {/* Stats Overview */}
@@ -61,41 +133,49 @@ export const DashboardPage = () => {
           <div className="kpi-grid">
             <KPICard
               title="Revenue"
-              value="Rp 1.5M"
-              subtitle="Daily Target: 2M"
+              value={formatCurrency(dashboardData.revenue_today)}
+              subtitle={`Target: ${formatCurrency(dashboardData.daily_target)}`}
               icon="💰"
               visualization="circular"
-              progress={75}
-              color="success"
-              trend={{ direction: 'up', value: '+12.5%' }}
+              progress={dashboardData.daily_progress}
+              color={dashboardData.revenue_trend >= 0 ? "success" : "warning"}
+              trend={{ 
+                direction: getTrendDirection(dashboardData.revenue_trend), 
+                value: formatPercentage(dashboardData.revenue_trend) 
+              }}
               onClick={() => handleCardClick('Revenue')}
             />
             
             <KPICard
               title="Orders"
-              value="89"
-              subtitle="vs 82 yesterday"
+              value={dashboardData.orders_today.toString()}
+              subtitle={`vs ${dashboardData.orders_yesterday} yesterday`}
               icon="🛒"
               color="info"
-              trend={{ direction: 'up', value: '+8.5%' }}
+              trend={{ 
+                direction: getTrendDirection(dashboardData.orders_trend), 
+                value: formatPercentage(dashboardData.orders_trend) 
+              }}
               onClick={() => handleCardClick('Orders')}
             />
             
             <KPICard
               title="Avg Check"
-              value="Rp 16.8K"
-              subtitle="Target: 18K"
+              value={formatCurrency(dashboardData.avg_check_today)}
+              subtitle={`vs ${formatCurrency(dashboardData.avg_check_yesterday)} yesterday`}
               icon="💳"
-              visualization="circular"
-              progress={93}
-              color="warning"
-              trend={{ direction: 'down', value: '-3.2%' }}
+              visualization="number"
+              color={dashboardData.avg_check_trend >= 0 ? "success" : "warning"}
+              trend={{ 
+                direction: getTrendDirection(dashboardData.avg_check_trend), 
+                value: formatPercentage(dashboardData.avg_check_trend) 
+              }}
               onClick={() => handleCardClick('Average Check')}
             />
             
             <KPICard
               title="Table Turnover"
-              value="3.2x"
+              value={`${dashboardData.table_turnover}x`}
               subtitle="Per day"
               icon="⏱️"
               color="success"
@@ -104,6 +184,30 @@ export const DashboardPage = () => {
             />
           </div>
         </div>
+
+        {/* Period Stats */}
+        {periodData && !periodLoading && (
+          <div className="period-stats" style={{ marginBottom: '2rem' }}>
+            <h2>Top Dishes - {selectedPeriod}</h2>
+            <div className="top-dishes-list">
+              {periodData.top_dishes.slice(0, 5).map((dish, index) => (
+                <div key={index} className="dish-item" style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  padding: '0.75rem',
+                  background: 'var(--bg-card)',
+                  borderRadius: 'var(--radius-md)',
+                  marginBottom: '0.5rem'
+                }}>
+                  <span>{index + 1}. {dish.name}</span>
+                  <span style={{ color: 'var(--accent-success)' }}>
+                    {formatCurrency(dish.revenue)}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Quick Actions */}
         <div className="quick-actions">
@@ -134,35 +238,32 @@ export const DashboardPage = () => {
             <h2>🤖 AI Insights</h2>
           </div>
           <div className="insights-list">
-            <div className="insight-item">
-              <span className="insight-icon">📈</span>
-              <div className="insight-content">
-                <h3 className="insight-title">Revenue Opportunity</h3>
-                <p className="insight-description">
-                  Your lunch service is 23% below capacity. Consider promotional offers between 12-2 PM.
-                </p>
+            {insightsLoading ? (
+              <p style={{ color: 'var(--text-secondary)' }}>Loading insights...</p>
+            ) : insightsData?.insights && insightsData.insights.length > 0 ? (
+              insightsData.insights.map((insight, index) => (
+                <div key={index} className="insight-item">
+                  <span className="insight-icon">
+                    {insight.type === 'revenue' ? '📈' : 
+                     insight.type === 'menu' ? '🍔' : '⚡'}
+                  </span>
+                  <div className="insight-content">
+                    <h3 className="insight-title">{insight.title}</h3>
+                    <p className="insight-description">{insight.content}</p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="insight-item">
+                <span className="insight-icon">💡</span>
+                <div className="insight-content">
+                  <h3 className="insight-title">No insights yet</h3>
+                  <p className="insight-description">
+                    AI insights will appear here after analyzing your restaurant data.
+                  </p>
+                </div>
               </div>
-            </div>
-            
-            <div className="insight-item">
-              <span className="insight-icon">🍔</span>
-              <div className="insight-content">
-                <h3 className="insight-title">Menu Optimization</h3>
-                <p className="insight-description">
-                  "Nasi Goreng Special" has 40% higher profit margin but 60% lower orders than regular version.
-                </p>
-              </div>
-            </div>
-            
-            <div className="insight-item">
-              <span className="insight-icon">⚡</span>
-              <div className="insight-content">
-                <h3 className="insight-title">Efficiency Alert</h3>
-                <p className="insight-description">
-                  Kitchen prep time increased by 15% this week. Review staffing for peak hours.
-                </p>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
