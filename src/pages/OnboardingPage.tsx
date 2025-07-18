@@ -31,6 +31,11 @@ export const OnboardingPage = () => {
     navigate('/settings');
   };
 
+  const handleDebug = () => {
+    hapticFeedback();
+    navigate('/debug');
+  };
+
   return (
     <div className="onboarding">
       <div className="onboarding-content">
@@ -98,6 +103,14 @@ export const OnboardingPage = () => {
             >
               <span className="action-icon">⚙️</span>
               <span className="action-title">Settings</span>
+            </button>
+            <button 
+              onClick={handleDebug}
+              className="settings-button"
+              style={{ marginLeft: '10px' }}
+            >
+              <span className="action-icon">🐛</span>
+              <span className="action-title">Debug</span>
             </button>
           </div>
         </div>
