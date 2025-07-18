@@ -7,8 +7,9 @@ export const DebugPage = () => {
   const testDailyReport = async () => {
     setLogs(prev => [...prev, 'Testing daily report...']);
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-      setLogs(prev => [...prev, `API URL: ${apiUrl}`]);
+      const isProxy = window.location.hostname.includes('vercel.app');
+      setLogs(prev => [...prev, `Using proxy: ${isProxy}`]);
+      setLogs(prev => [...prev, `Host: ${window.location.hostname}`]);
       
       const data = await api.getDailyReport();
       setLogs(prev => [...prev, 'Success!', JSON.stringify(data, null, 2)]);
@@ -36,10 +37,24 @@ export const DebugPage = () => {
     }
   };
   
+  const testProxy = async () => {
+    setLogs(prev => [...prev, 'Testing proxy endpoint...']);
+    try {
+      const response = await fetch('/api/test');
+      const data = await response.json();
+      setLogs(prev => [...prev, 'Proxy test success!', JSON.stringify(data, null, 2)]);
+    } catch (error: any) {
+      setLogs(prev => [...prev, `Proxy test error: ${error.message}`]);
+    }
+  };
+
   return (
     <div style={{ padding: '20px' }}>
       <h1>Debug Page</h1>
       <div style={{ marginBottom: '20px' }}>
+        <button onClick={testProxy} style={{ marginRight: '10px' }}>
+          Test Proxy
+        </button>
         <button onClick={testHealthCheck} style={{ marginRight: '10px' }}>
           Test Health Check
         </button>
