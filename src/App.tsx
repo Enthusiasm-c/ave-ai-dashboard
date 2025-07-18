@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import { useTelegram } from '@/hooks/useTelegram';
 import { OnboardingPage } from '@/pages/OnboardingPage';
 import { DailyReportPage } from '@/pages/DailyReportPage';
@@ -11,6 +12,14 @@ import './App.css';
 
 function App() {
   const { isReady } = useTelegram();
+
+  useEffect(() => {
+    // Debug logging
+    console.log('Current URL:', window.location.href);
+    console.log('Path:', window.location.pathname);
+    console.log('Search:', window.location.search);
+    console.log('Hash:', window.location.hash);
+  }, []);
 
   if (!isReady) {
     return (
