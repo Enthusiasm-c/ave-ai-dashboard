@@ -274,8 +274,11 @@ export const api = {
     if (date) {
       authParams.append('date_str', date);
     }
+    const url = `${API_BASE_URL}${API_VERSION}/bot/daily?${authParams}`;
+    console.log('Fetching daily report from:', url);
+    
     const response = await fetch(
-      `${API_BASE_URL}${API_VERSION}/bot/daily?${authParams}`,
+      url,
       {
         method: 'GET',
         headers: {

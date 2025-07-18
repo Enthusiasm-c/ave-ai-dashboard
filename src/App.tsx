@@ -7,6 +7,7 @@ import { ProfitPage } from '@/pages/ProfitPage';
 import { AnalysisPage } from '@/pages/AnalysisPage';
 import { ABCPage } from '@/pages/ABCPage';
 import { SettingsPage } from '@/pages/SettingsPage';
+import { DebugPage } from '@/pages/DebugPage';
 import { Layout } from '@/components/Layout';
 import './App.css';
 
@@ -40,6 +41,7 @@ function App() {
           <Route path="/analysis" element={<AnalysisPage />} />
           <Route path="/abc" element={<ABCPage />} />
           <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/debug" element={<DebugPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Layout>

@@ -26,6 +26,7 @@ function useApiCall<T>(
       const result = await apiCall();
       setData(result);
     } catch (err) {
+      console.error('API call failed:', err);
       setError(err as Error);
     } finally {
       setLoading(false);
