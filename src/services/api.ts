@@ -4,6 +4,24 @@ import { TelegramWebApp } from '@/types/telegram';
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 const API_VERSION = '/api/v1';
 
+// Use proxy in production
+const getApiUrl = (path: string, params?: URLSearchParams) => {
+  if (window.location.hostname.includes('vercel.app')) {
+    // Use Vercel proxy
+    const fullPath = `${API_VERSION}${path}`;
+    let url = `/api/proxy?path=${encodeURIComponent(fullPath)}`;
+    if (params) {
+      url += `&${params.toString()}`;
+    }
+    return url;
+  }
+  let url = `${API_BASE_URL}${API_VERSION}${path}`;
+  if (params) {
+    url += `?${params.toString()}`;
+  }
+  return url;
+};
+
 // Types
 export interface DashboardData {
   revenue_today: number;
@@ -274,18 +292,16 @@ export const api = {
     if (date) {
       authParams.append('date_str', date);
     }
-    const url = `${API_BASE_URL}${API_VERSION}/bot/daily?${authParams}`;
+    
+    const url = getApiUrl('/bot/daily', authParams);
     console.log('Fetching daily report from:', url);
     
-    const response = await fetch(
-      url,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
     if (!response.ok) {
       throw new Error(`Failed to fetch daily report: ${response.statusText}`);

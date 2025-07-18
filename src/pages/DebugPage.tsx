@@ -20,8 +20,15 @@ export const DebugPage = () => {
   const testHealthCheck = async () => {
     setLogs(prev => [...prev, 'Testing health check...']);
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-      const response = await fetch(`${apiUrl}/health`);
+      let url;
+      if (window.location.hostname.includes('vercel.app')) {
+        url = '/api/proxy?path=/health';
+      } else {
+        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+        url = `${apiUrl}/health`;
+      }
+      setLogs(prev => [...prev, `Health URL: ${url}`]);
+      const response = await fetch(url);
       const data = await response.json();
       setLogs(prev => [...prev, 'Health check success!', JSON.stringify(data)]);
     } catch (error: any) {
