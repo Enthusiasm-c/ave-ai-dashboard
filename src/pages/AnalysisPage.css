@@ -1,0 +1,257 @@
+.analysis-page {
+  padding: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.analysis-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.analysis-header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 0.5rem 0;
+}
+
+.analysis-header p {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.month-picker {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-size: 1rem;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.metric-card {
+  background: var(--bg-card);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.metric-card h3 {
+  font-size: 1.125rem;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+.metric-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.metric-item:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.metric-label {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.metric-value {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.trend-up {
+  color: #4CAF50;
+}
+
+.metric-target {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: normal;
+}
+
+/* ABC Analysis */
+.abc-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: var(--bg-primary);
+  border-radius: 8px;
+}
+
+.abc-class {
+  font-weight: 700;
+  color: var(--accent-primary);
+  min-width: 60px;
+}
+
+.abc-details {
+  display: flex;
+  justify-content: space-between;
+  flex: 1;
+  font-size: 0.875rem;
+}
+
+.abc-percent {
+  color: var(--text-secondary);
+}
+
+/* Payment Methods */
+.payment-chart {
+  margin-top: 1rem;
+}
+
+.payment-bar {
+  margin-bottom: 0.75rem;
+}
+
+.payment-fill {
+  padding: 0.5rem;
+  border-radius: 4px;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: width 0.3s ease;
+}
+
+.payment-fill.digital {
+  background: #2196F3;
+}
+
+.payment-fill.cash {
+  background: #FF9800;
+}
+
+/* Anomalies Section */
+.anomalies-section {
+  margin-top: 2rem;
+}
+
+.anomalies-section h2 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+.anomalies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.anomaly-card {
+  background: var(--bg-card);
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.anomaly-card h4 {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.anomaly-card.high h4 {
+  color: #4CAF50;
+}
+
+.anomaly-card.low h4 {
+  color: #f44336;
+}
+
+.anomaly-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.anomaly-card li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.875rem;
+}
+
+.anomaly-card li:last-child {
+  border-bottom: none;
+}
+
+/* Weekly pattern */
+.weekly-pattern {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.day-pattern {
+  background: var(--bg-card);
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  border: 1px solid var(--border-color);
+}
+
+.day-name {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.day-revenue {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* Top dishes grid */
+.top-dishes-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.top-dish-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  background: var(--bg-card);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.dish-rank {
+  font-weight: 700;
+  color: var(--accent-primary);
+  min-width: 30px;
+}
+
+.dish-name {
+  flex: 1;
+  color: var(--text-primary);
+}
+
+.dish-revenue {
+  font-weight: 600;
+  color: var(--text-primary);
+}

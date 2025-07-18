@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useTelegram } from '@/hooks/useTelegram';
 import { useDashboard, usePeriodStats, useInsights, useDataRefresh } from '@/hooks/useApi';
 import { KPICard } from '@/components/Dashboard/KPICard';
@@ -8,6 +8,7 @@ import './DashboardPage.css';
 export const DashboardPage = () => {
   const { showAlert, hapticFeedback } = useTelegram();
   const [selectedPeriod, setSelectedPeriod] = useState<'today' | 'week' | 'month'>('today');
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
   
   // Fetch data
   const { data: dashboardData, loading: dashboardLoading, error: dashboardError } = useDashboard();
@@ -87,8 +88,30 @@ export const DashboardPage = () => {
       <div className="dashboard-inner">
         {/* Header */}
         <div className="dashboard-header">
-          <h1>📊 Dashboard</h1>
-          <p>Real-time insights for your restaurant</p>
+          <div>
+            <h1>📊 Daily Report</h1>
+            <p>Sales data and insights</p>
+          </div>
+          <div className="date-picker-container">
+            <input 
+              type="date" 
+              value={selectedDate}
+              onChange={(e) => {
+                hapticFeedback();
+                setSelectedDate(e.target.value);
+              }}
+              max={new Date().toISOString().split('T')[0]}
+              className="date-picker"
+              style={{
+                padding: '0.5rem 1rem',
+                borderRadius: 'var(--radius-md)',
+                border: '1px solid var(--border-color)',
+                background: 'var(--bg-card)',
+                color: 'var(--text-primary)',
+                fontSize: '1rem'
+              }}
+            />
+          </div>
         </div>
 
         {/* Refresh Button */}

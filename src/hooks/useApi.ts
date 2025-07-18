@@ -1,5 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
-import { api, DashboardData, PeriodStats, InsightsResponse } from '@/services/api';
+import { 
+  api, 
+  DashboardData, 
+  PeriodStats, 
+  InsightsResponse,
+  DailyReportData,
+  ProfitReportData,
+  AnalysisData,
+  ABCAnalysisData
+} from '@/services/api';
 
 // Generic hook for API calls
 function useApiCall<T>(
@@ -66,4 +75,24 @@ export function useDataRefresh() {
   }, []);
 
   return { refresh, refreshing, error };
+}
+
+// Hook for daily report
+export function useDailyReport(date?: string) {
+  return useApiCall<DailyReportData>(() => api.getDailyReport(date), [date]);
+}
+
+// Hook for profit report
+export function useProfitReport(date?: string) {
+  return useApiCall<ProfitReportData>(() => api.getProfitReport(date), [date]);
+}
+
+// Hook for analysis
+export function useAnalysis(month?: string) {
+  return useApiCall<AnalysisData>(() => api.getAnalysis(month), [month]);
+}
+
+// Hook for ABC analysis
+export function useABCAnalysis(days: number = 30) {
+  return useApiCall<ABCAnalysisData>(() => api.getABCAnalysis(days), [days]);
 }

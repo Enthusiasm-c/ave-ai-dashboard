@@ -49,6 +49,111 @@ export interface InsightsResponse {
   message?: string;
 }
 
+// New types for bot endpoints
+export interface DailyReportData {
+  date: string;
+  revenue: number;
+  orders: number;
+  avg_check: number;
+  items_sold: number;
+  top_dishes: Array<{
+    name: string;
+    revenue: number;
+    rank: number;
+  }>;
+  hourly_data: Array<{
+    hour: number;
+    revenue: number;
+    orders: number;
+  }>;
+  kpis?: {
+    [key: string]: any;
+  };
+}
+
+export interface ProfitReportData {
+  date: string;
+  revenue: number;
+  cost: number;
+  profit: number;
+  margin_percent: number;
+  items: Array<{
+    name: string;
+    quantity: number;
+    revenue: number;
+    cost: number;
+    profit: number;
+    margin_percent: number;
+  }>;
+  summary: {
+    total_items: number;
+    profitable_items: number;
+    loss_items: number;
+  };
+}
+
+export interface AnalysisData {
+  period: string;
+  total_revenue: number;
+  total_orders: number;
+  avg_daily_revenue: number;
+  avg_check: number;
+  best_day: {
+    date: string;
+    revenue: number;
+  };
+  worst_day: {
+    date: string;
+    revenue: number;
+  };
+  weekly_pattern: Array<{
+    day: string;
+    avg_revenue: number;
+  }>;
+  top_categories: Array<{
+    name: string;
+    revenue: number;
+  }>;
+  top_dishes: Array<{
+    name: string;
+    revenue: number;
+  }>;
+  payment_methods: {
+    [key: string]: number;
+  };
+}
+
+export interface ABCAnalysisData {
+  period: string;
+  summary: {
+    totalItems: number;
+    efficientItems: number;
+    optimizationNeeded: number;
+    recommendRemove: number;
+  };
+  items: Array<{
+    name: string;
+    class: string;
+    revenue: number;
+    quantity: number;
+    category: string;
+    status: string;
+    revenue_percent: number;
+  }>;
+  categories: {
+    top: Array<{
+      name: string;
+      revenue: number;
+      items: number;
+    }>;
+    problem: Array<{
+      name: string;
+      revenue: number;
+      items: number;
+    }>;
+  };
+}
+
 // Helper to get auth params from Telegram WebApp
 function getTelegramAuthParams(): URLSearchParams {
   const WebApp = (window as any).Telegram?.WebApp as TelegramWebApp;
@@ -158,6 +263,93 @@ export const api = {
 
     if (!response.ok) {
       throw new Error(`Failed to refresh data: ${response.statusText}`);
+    }
+
+    return response.json();
+  },
+
+  // Bot endpoints
+  async getDailyReport(date?: string): Promise<DailyReportData> {
+    const authParams = getTelegramAuthParams();
+    if (date) {
+      authParams.append('date_str', date);
+    }
+    const response = await fetch(
+      `${API_BASE_URL}${API_VERSION}/bot/daily?${authParams}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch daily report: ${response.statusText}`);
+    }
+
+    return response.json();
+  },
+
+  async getProfitReport(date?: string): Promise<ProfitReportData> {
+    const authParams = getTelegramAuthParams();
+    if (date) {
+      authParams.append('date_str', date);
+    }
+    const response = await fetch(
+      `${API_BASE_URL}${API_VERSION}/bot/profit?${authParams}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch profit report: ${response.statusText}`);
+    }
+
+    return response.json();
+  },
+
+  async getAnalysis(month?: string): Promise<AnalysisData> {
+    const authParams = getTelegramAuthParams();
+    if (month) {
+      authParams.append('month', month);
+    }
+    const response = await fetch(
+      `${API_BASE_URL}${API_VERSION}/bot/analysis?${authParams}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch analysis: ${response.statusText}`);
+    }
+
+    return response.json();
+  },
+
+  async getABCAnalysis(days: number = 30): Promise<ABCAnalysisData> {
+    const authParams = getTelegramAuthParams();
+    authParams.append('days', days.toString());
+    const response = await fetch(
+      `${API_BASE_URL}${API_VERSION}/bot/abc?${authParams}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch ABC analysis: ${response.statusText}`);
     }
 
     return response.json();

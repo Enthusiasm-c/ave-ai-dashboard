@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Home, BarChart3, Settings } from 'lucide-react';
+import { Home } from 'lucide-react';
 import { useTelegram } from '@/hooks/useTelegram';
 import './Navigation.css';
 
@@ -12,24 +12,17 @@ export const Navigation = ({ currentPath }: NavigationProps) => {
 
   const navItems = [
     {
-      path: '/dashboard',
+      path: '/',
       icon: Home,
-      label: 'Dashboard',
-      isActive: currentPath === '/dashboard'
-    },
-    {
-      path: '/analytics',
-      icon: BarChart3,
-      label: 'Analytics',
-      isActive: currentPath === '/analytics'
-    },
-    {
-      path: '/settings',
-      icon: Settings,
-      label: 'Settings',
-      isActive: currentPath === '/settings'
+      label: 'Home',
+      isActive: currentPath === '/'
     }
   ];
+  
+  // Only show navigation on non-home pages
+  if (currentPath === '/') {
+    return null;
+  }
 
   const handleNavClick = () => {
     hapticFeedback();

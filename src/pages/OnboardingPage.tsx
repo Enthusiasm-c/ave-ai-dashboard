@@ -1,26 +1,34 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTelegram } from '@/hooks/useTelegram';
 import './OnboardingPage.css';
 
 export const OnboardingPage = () => {
   const navigate = useNavigate();
-  const { user, showAlert, hapticFeedback } = useTelegram();
-  const [, setIsConnected] = useState(false);
+  const { user, hapticFeedback } = useTelegram();
 
-  const handleGetStarted = () => {
+  const handleDailyReport = () => {
     hapticFeedback();
-    showAlert('Welcome to Ave AI! 🎉');
-    // Simulate connection check
-    setTimeout(() => {
-      setIsConnected(true);
-      navigate('/dashboard');
-    }, 1000);
+    navigate('/dashboard');
   };
 
-  const handleConnectPOS = () => {
+  const handleProfitReport = () => {
     hapticFeedback();
-    showAlert('POS connection feature will be added in the next tasks');
+    navigate('/profit');
+  };
+
+  const handleAnalysis = () => {
+    hapticFeedback();
+    navigate('/analysis');
+  };
+
+  const handleABCReport = () => {
+    hapticFeedback();
+    navigate('/abc');
+  };
+
+  const handleSettings = () => {
+    hapticFeedback();
+    navigate('/settings');
   };
 
   return (
@@ -43,46 +51,55 @@ export const OnboardingPage = () => {
           </div>
         )}
 
-        <div className="onboarding-steps">
-          <div className="step">
-            <div className="step-number">1</div>
-            <div className="step-content">
-              <h3>Connect POS System</h3>
-              <p>Syrve, Poster or other systems</p>
-            </div>
+        <div className="main-actions">
+          <h3>Reports & Analytics</h3>
+          <div className="actions-grid">
+            <button 
+              onClick={handleDailyReport}
+              className="action-button"
+            >
+              <span className="action-icon">📊</span>
+              <span className="action-title">Daily Report</span>
+              <span className="action-subtitle">Sales data for any day</span>
+            </button>
+            
+            <button 
+              onClick={handleProfitReport}
+              className="action-button"
+            >
+              <span className="action-icon">💰</span>
+              <span className="action-title">Profit Report</span>
+              <span className="action-subtitle">Revenue & margins analysis</span>
+            </button>
+            
+            <button 
+              onClick={handleAnalysis}
+              className="action-button"
+            >
+              <span className="action-icon">📈</span>
+              <span className="action-title">30-Day Analysis</span>
+              <span className="action-subtitle">Monthly trends & insights</span>
+            </button>
+            
+            <button 
+              onClick={handleABCReport}
+              className="action-button"
+            >
+              <span className="action-icon">🎯</span>
+              <span className="action-title">ABC Analysis</span>
+              <span className="action-subtitle">Menu performance ranking</span>
+            </button>
           </div>
-
-          <div className="step">
-            <div className="step-number">2</div>
-            <div className="step-content">
-              <h3>Configure Settings</h3>
-              <p>Seats, working hours, expenses</p>
-            </div>
-          </div>
-
-          <div className="step">
-            <div className="step-number">3</div>
-            <div className="step-content">
-              <h3>Get Insights</h3>
-              <p>AI analysis and growth recommendations</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="onboarding-actions">
-          <button 
-            onClick={handleConnectPOS}
-            className="secondary-button"
-          >
-            🔗 Connect POS
-          </button>
           
-          <button 
-            onClick={handleGetStarted}
-            className="primary-button"
-          >
-            🚀 Get Started
-          </button>
+          <div className="settings-section">
+            <button 
+              onClick={handleSettings}
+              className="settings-button"
+            >
+              <span className="action-icon">⚙️</span>
+              <span className="action-title">Settings</span>
+            </button>
+          </div>
         </div>
 
         <div className="features-preview">

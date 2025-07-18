@@ -1,7 +1,10 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useTelegram } from '@/hooks/useTelegram';
 import { OnboardingPage } from '@/pages/OnboardingPage';
-import { DashboardPage } from '@/pages/DashboardPage';
+import { DailyReportPage } from '@/pages/DailyReportPage';
+import { ProfitPage } from '@/pages/ProfitPage';
+import { AnalysisPage } from '@/pages/AnalysisPage';
+import { ABCPage } from '@/pages/ABCPage';
 import { SettingsPage } from '@/pages/SettingsPage';
 import { Layout } from '@/components/Layout';
 import './App.css';
@@ -23,7 +26,10 @@ function App() {
       <Layout>
         <Routes>
           <Route path="/" element={<OnboardingPage />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/dashboard" element={<DailyReportPage />} />
+          <Route path="/profit" element={<ProfitPage />} />
+          <Route path="/analysis" element={<AnalysisPage />} />
+          <Route path="/abc" element={<ABCPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
