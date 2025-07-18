@@ -209,15 +209,14 @@ export const api = {
   // Get dashboard data
   async getDashboard(): Promise<DashboardData> {
     const authParams = getTelegramAuthParams();
-    const response = await fetch(
-      `${API_BASE_URL}${API_VERSION}/dashboard?${authParams}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    const url = getApiUrl('/dashboard', authParams);
+    
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
     if (!response.ok) {
       throw new Error(`Failed to fetch dashboard: ${response.statusText}`);
@@ -229,15 +228,14 @@ export const api = {
   // Get statistics for a period
   async getPeriodStats(period: 'today' | 'week' | 'month'): Promise<PeriodStats> {
     const authParams = getTelegramAuthParams();
-    const response = await fetch(
-      `${API_BASE_URL}${API_VERSION}/stats/${period}?${authParams}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    const url = getApiUrl(`/stats/${period}`, authParams);
+    
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
     if (!response.ok) {
       throw new Error(`Failed to fetch stats: ${response.statusText}`);
@@ -249,15 +247,14 @@ export const api = {
   // Get AI insights
   async getInsights(): Promise<InsightsResponse> {
     const authParams = getTelegramAuthParams();
-    const response = await fetch(
-      `${API_BASE_URL}${API_VERSION}/insights?${authParams}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    const url = getApiUrl('/insights', authParams);
+    
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
     if (!response.ok) {
       throw new Error(`Failed to fetch insights: ${response.statusText}`);
@@ -269,15 +266,14 @@ export const api = {
   // Trigger data refresh
   async refreshData(): Promise<{ status: string; message: string }> {
     const authParams = getTelegramAuthParams();
-    const response = await fetch(
-      `${API_BASE_URL}${API_VERSION}/refresh-data?${authParams}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    const url = getApiUrl('/refresh-data', authParams);
+    
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
     if (!response.ok) {
       throw new Error(`Failed to refresh data: ${response.statusText}`);
@@ -315,15 +311,14 @@ export const api = {
     if (date) {
       authParams.append('date_str', date);
     }
-    const response = await fetch(
-      `${API_BASE_URL}${API_VERSION}/bot/profit?${authParams}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    const url = getApiUrl('/bot/profit', authParams);
+    
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
     if (!response.ok) {
       throw new Error(`Failed to fetch profit report: ${response.statusText}`);
@@ -337,15 +332,14 @@ export const api = {
     if (month) {
       authParams.append('month', month);
     }
-    const response = await fetch(
-      `${API_BASE_URL}${API_VERSION}/bot/analysis?${authParams}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    const url = getApiUrl('/bot/analysis', authParams);
+    
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
     if (!response.ok) {
       throw new Error(`Failed to fetch analysis: ${response.statusText}`);
@@ -357,15 +351,14 @@ export const api = {
   async getABCAnalysis(days: number = 30): Promise<ABCAnalysisData> {
     const authParams = getTelegramAuthParams();
     authParams.append('days', days.toString());
-    const response = await fetch(
-      `${API_BASE_URL}${API_VERSION}/bot/abc?${authParams}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    const url = getApiUrl('/bot/abc', authParams);
+    
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
     if (!response.ok) {
       throw new Error(`Failed to fetch ABC analysis: ${response.statusText}`);
