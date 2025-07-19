@@ -181,6 +181,14 @@ function getTelegramAuthParams(): URLSearchParams {
   const user = WebApp.initDataUnsafe.user;
   const authDate = WebApp.initDataUnsafe.auth_date || Math.floor(Date.now() / 1000);
   
+  // Debug logging
+  console.log('Telegram auth data:', {
+    user_id: user.id,
+    auth_date: authDate,
+    hash: WebApp.initDataUnsafe.hash,
+    initData: WebApp.initData
+  });
+  
   // In production, hash should be provided by Telegram
   const params = new URLSearchParams({
     user_id: user.id.toString(),

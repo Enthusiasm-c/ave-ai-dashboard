@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
 import { 
-  api, 
   DashboardData, 
   PeriodStats, 
   InsightsResponse,
@@ -9,6 +8,7 @@ import {
   AnalysisData,
   ABCAnalysisData
 } from '@/services/api';
+import { webappApi } from '@/services/webapp-api';
 
 // Generic hook for API calls
 function useApiCall<T>(
@@ -42,17 +42,17 @@ function useApiCall<T>(
 
 // Hook for dashboard data
 export function useDashboard() {
-  return useApiCall<DashboardData>(() => api.getDashboard());
+  return useApiCall<DashboardData>(() => webappApi.getDashboard());
 }
 
 // Hook for period statistics
 export function usePeriodStats(period: 'today' | 'week' | 'month') {
-  return useApiCall<PeriodStats>(() => api.getPeriodStats(period), [period]);
+  return useApiCall<PeriodStats>(() => webappApi.getPeriodStats(period), [period]);
 }
 
 // Hook for insights
 export function useInsights() {
-  return useApiCall<InsightsResponse>(() => api.getInsights());
+  return useApiCall<InsightsResponse>(() => webappApi.getInsights());
 }
 
 // Hook for data refresh
@@ -64,7 +64,7 @@ export function useDataRefresh() {
     try {
       setRefreshing(true);
       setError(null);
-      await api.refreshData();
+      await webappApi.refreshData();
       // Return true to indicate success
       return true;
     } catch (err) {
@@ -80,20 +80,20 @@ export function useDataRefresh() {
 
 // Hook for daily report
 export function useDailyReport(date?: string) {
-  return useApiCall<DailyReportData>(() => api.getDailyReport(date), [date]);
+  return useApiCall<DailyReportData>(() => webappApi.getDailyReport(date), [date]);
 }
 
 // Hook for profit report
 export function useProfitReport(date?: string) {
-  return useApiCall<ProfitReportData>(() => api.getProfitReport(date), [date]);
+  return useApiCall<ProfitReportData>(() => webappApi.getProfitReport(date), [date]);
 }
 
 // Hook for analysis
 export function useAnalysis(month?: string) {
-  return useApiCall<AnalysisData>(() => api.getAnalysis(month), [month]);
+  return useApiCall<AnalysisData>(() => webappApi.getAnalysis(month), [month]);
 }
 
 // Hook for ABC analysis
 export function useABCAnalysis(days: number = 30) {
-  return useApiCall<ABCAnalysisData>(() => api.getABCAnalysis(days), [days]);
+  return useApiCall<ABCAnalysisData>(() => webappApi.getABCAnalysis(days), [days]);
 }

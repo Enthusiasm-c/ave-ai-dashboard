@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { api } from '@/services/api';
+import { webappApi } from '@/services/webapp-api';
 
 export const DebugPage = () => {
   const [logs, setLogs] = useState<string[]>([]);
@@ -20,7 +20,7 @@ export const DebugPage = () => {
         setLogs(prev => [...prev, `No Telegram WebApp detected`]);
       }
       
-      const data = await api.getDailyReport();
+      const data = await webappApi.getDailyReport();
       setLogs(prev => [...prev, 'Success!', JSON.stringify(data, null, 2)]);
     } catch (error: any) {
       setLogs(prev => [...prev, `Error: ${error.message}`]);
