@@ -282,6 +282,7 @@ export const api = {
     
     const url = getApiUrl('/bot/daily', authParams);
     console.log('Fetching daily report from:', url);
+    console.log('Auth params:', authParams.toString());
     
     const response = await fetch(url, {
       method: 'GET',

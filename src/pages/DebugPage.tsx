@@ -10,10 +10,23 @@ export const DebugPage = () => {
       const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
       setLogs(prev => [...prev, `API URL: ${apiUrl}`]);
       
+      // Check Telegram WebApp
+      const tg = (window as any).Telegram?.WebApp;
+      if (tg) {
+        setLogs(prev => [...prev, `Telegram WebApp detected`]);
+        setLogs(prev => [...prev, `Init data: ${tg.initData || 'empty'}`]);
+        setLogs(prev => [...prev, `User: ${JSON.stringify(tg.initDataUnsafe?.user || 'no user')}`]);
+      } else {
+        setLogs(prev => [...prev, `No Telegram WebApp detected`]);
+      }
+      
       const data = await api.getDailyReport();
       setLogs(prev => [...prev, 'Success!', JSON.stringify(data, null, 2)]);
     } catch (error: any) {
-      setLogs(prev => [...prev, `Error: ${error.message}`, error.stack || '']);
+      setLogs(prev => [...prev, `Error: ${error.message}`]);
+      if (error.stack) {
+        setLogs(prev => [...prev, `Stack: ${error.stack}`]);
+      }
     }
   };
   
