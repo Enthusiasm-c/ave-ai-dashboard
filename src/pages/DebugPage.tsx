@@ -55,11 +55,16 @@ export const DebugPage = () => {
 
   const testDirectFetch = async () => {
     setLogs(prev => [...prev, 'Testing direct fetch...']);
+    setLogs(prev => [...prev, `Current origin: ${window.location.origin}`]);
+    setLogs(prev => [...prev, `Current protocol: ${window.location.protocol}`]);
+    
     try {
-      // Test with mode: 'no-cors' to bypass CORS
+      // Test with different modes
+      setLogs(prev => [...prev, 'Trying with mode: cors...']);
       const response = await fetch('https://api.getsenso.app/health', {
         method: 'GET',
         mode: 'cors',
+        credentials: 'omit',
         headers: {
           'Accept': 'application/json',
         }
@@ -74,6 +79,19 @@ export const DebugPage = () => {
       }
     } catch (error: any) {
       setLogs(prev => [...prev, `Direct fetch error: ${error.message}`]);
+      
+      // Try no-cors mode
+      try {
+        setLogs(prev => [...prev, 'Trying with mode: no-cors...']);
+        const response2 = await fetch('https://api.getsenso.app/health', {
+          method: 'GET',
+          mode: 'no-cors'
+        });
+        setLogs(prev => [...prev, `No-cors response type: ${response2.type}`]);
+        setLogs(prev => [...prev, `No-cors response status: ${response2.status}`]);
+      } catch (error2: any) {
+        setLogs(prev => [...prev, `No-cors error: ${error2.message}`]);
+      }
     }
   };
 
