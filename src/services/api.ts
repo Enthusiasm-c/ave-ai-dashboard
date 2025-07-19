@@ -4,17 +4,8 @@ import { TelegramWebApp } from '@/types/telegram';
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 const API_VERSION = '/api/v1';
 
-// Use proxy in production
+// Simple API URL builder (no proxy needed with HTTPS)
 const getApiUrl = (path: string, params?: URLSearchParams) => {
-  if (window.location.hostname.includes('vercel.app')) {
-    // Use Vercel proxy
-    const fullPath = `${API_VERSION}${path}`;
-    let url = `/api/proxy?path=${encodeURIComponent(fullPath)}`;
-    if (params) {
-      url += `&${params.toString()}`;
-    }
-    return url;
-  }
   let url = `${API_BASE_URL}${API_VERSION}${path}`;
   if (params) {
     url += `?${params.toString()}`;
