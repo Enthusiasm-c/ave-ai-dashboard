@@ -48,24 +48,6 @@ export const DebugPage = () => {
     }
   };
 
-  const testProxyHealth = async () => {
-    setLogs(prev => [...prev, 'Testing health through proxy...']);
-    try {
-      const response = await fetch('/api/proxy?path=/health');
-      setLogs(prev => [...prev, `Response status: ${response.status}`]);
-      const text = await response.text();
-      setLogs(prev => [...prev, `Response text: ${text}`]);
-      
-      try {
-        const data = JSON.parse(text);
-        setLogs(prev => [...prev, 'Parsed JSON:', JSON.stringify(data, null, 2)]);
-      } catch (e) {
-        setLogs(prev => [...prev, 'Could not parse as JSON']);
-      }
-    } catch (error: any) {
-      setLogs(prev => [...prev, `Proxy health error: ${error.message}`]);
-    }
-  };
 
   return (
     <div style={{ padding: '20px' }}>
