@@ -24,10 +24,21 @@ export const DebugPage = () => {
       const url = `${apiUrl}/health`;
       setLogs(prev => [...prev, `Health URL: ${url}`]);
       const response = await fetch(url);
-      const data = await response.json();
-      setLogs(prev => [...prev, 'Health check success!', JSON.stringify(data)]);
+      setLogs(prev => [...prev, `Response status: ${response.status}`]);
+      setLogs(prev => [...prev, `Response ok: ${response.ok}`]);
+      const text = await response.text();
+      setLogs(prev => [...prev, `Response text: ${text}`]);
+      
+      try {
+        const data = JSON.parse(text);
+        setLogs(prev => [...prev, 'Health check success!', JSON.stringify(data)]);
+      } catch (e) {
+        setLogs(prev => [...prev, 'Failed to parse JSON']);
+      }
     } catch (error: any) {
       setLogs(prev => [...prev, `Health check error: ${error.message}`]);
+      setLogs(prev => [...prev, `Error type: ${error.name}`]);
+      setLogs(prev => [...prev, `Stack: ${error.stack}`]);
     }
   };
   
@@ -42,6 +53,29 @@ export const DebugPage = () => {
     }
   };
 
+  const testDirectFetch = async () => {
+    setLogs(prev => [...prev, 'Testing direct fetch...']);
+    try {
+      // Test with mode: 'no-cors' to bypass CORS
+      const response = await fetch('https://api.getsenso.app/health', {
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+          'Accept': 'application/json',
+        }
+      });
+      setLogs(prev => [...prev, `Direct fetch status: ${response.status}`]);
+      
+      if (response.ok) {
+        const data = await response.json();
+        setLogs(prev => [...prev, 'Direct fetch success!', JSON.stringify(data)]);
+      } else {
+        setLogs(prev => [...prev, `Direct fetch failed: ${response.statusText}`]);
+      }
+    } catch (error: any) {
+      setLogs(prev => [...prev, `Direct fetch error: ${error.message}`]);
+    }
+  };
 
   return (
     <div style={{ padding: '20px' }}>
@@ -52,6 +86,9 @@ export const DebugPage = () => {
         </button>
         <button onClick={testHealthCheck} style={{ marginRight: '10px' }}>
           Test Health Check
+        </button>
+        <button onClick={testDirectFetch} style={{ marginRight: '10px' }}>
+          Test Direct Fetch
         </button>
         <button onClick={testDailyReport} style={{ marginRight: '10px' }}>
           Test Daily Report
