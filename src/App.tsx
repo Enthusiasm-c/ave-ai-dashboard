@@ -8,6 +8,7 @@ import { AnalysisPage } from '@/pages/AnalysisPage';
 import { ABCPage } from '@/pages/ABCPage';
 import { SettingsPage } from '@/pages/SettingsPage';
 import { DebugPage } from '@/pages/DebugPage';
+import { DebugAuth } from '@/pages/DebugAuth';
 import { Layout } from '@/components/Layout';
 import './App.css';
 
@@ -42,6 +43,7 @@ function App() {
           <Route path="/abc" element={<ABCPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/debug" element={<DebugPage />} />
+          <Route path="/debug-auth" element={<DebugAuth />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Layout>

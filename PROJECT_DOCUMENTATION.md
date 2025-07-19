@@ -117,28 +117,78 @@ legacy-peer-deps=true
 ### Backend API Endpoints
 
 ```
+# System Endpoints
 POST /tg/webhook/{token}    - Telegram webhook
 GET  /oauth/callback        - OAuth callback for POS
 GET  /health               - Health check
 
-# Mini App API
-GET  /api/v1/dashboard     - Main KPIs
+# Mini App API (Telegram WebApp auth required)
+GET  /api/v1/dashboard     - Main KPIs (from mini_app.py - MISSING!)
 GET  /api/v1/stats/{period} - Period statistics  
 GET  /api/v1/insights      - AI insights
 POST /api/v1/refresh-data  - Trigger data refresh
+
+# Bot API (Telegram auth required)
+GET  /api/v1/bot/daily     - Daily sales report
+GET  /api/v1/bot/profit    - Profit/margin analysis
+GET  /api/v1/bot/analysis  - 30-day analysis
+GET  /api/v1/bot/abc       - ABC analysis
 ```
 
+**Note**: The file `app/api/mini_app.py` containing Mini App endpoints is missing from the current codebase but is imported by `bot_endpoints.py`.
+
 ### Authentication Flow
-1. Telegram Mini App sends user data (user_id, auth_date, hash)
-2. Backend verifies hash using HMAC-SHA256 with bot token
-3. Checks if user has access to restaurant data
-4. Returns requested data
+
+#### Dual Authentication System
+
+**1. Telegram Mini App Authentication (Frontend → Backend)**
+- Purpose: Verify requests come from legitimate Telegram users
+- Process:
+  1. Telegram injects WebApp object with user data:
+     - `user_id`: Telegram user ID
+     - `auth_date`: Unix timestamp
+     - `hash`: HMAC-SHA256 signature
+     - `first_name`, `last_name`, `username` (optional)
+  2. Frontend sends these parameters with each API request
+  3. Backend verifies hash using:
+     ```
+     secret_key = HMAC-SHA256("WebAppData", bot_token)
+     expected_hash = HMAC-SHA256(data_check_string, secret_key)
+     ```
+  4. Checks if user has access (telegram_chat_id in account.json)
+  5. Returns requested data or 401 if unauthorized
+
+**2. Syrve POS Authentication (Backend → Syrve)**
+- Purpose: Backend authenticates with Syrve to fetch restaurant data
+- Process:
+  1. Backend reads credentials from environment:
+     - `SYRVE_LOGIN`, `SYRVE_PASSWORD`
+     - `SYRVE_STORE_ID`, `SYRVE_SERVER_URL`
+  2. Password is SHA1 hashed
+  3. Requests token: `GET /resto/api/auth?login={login}&pass={sha1_hash}`
+  4. Receives session token (GUID format)
+  5. Token cached for 25 minutes, auto-refreshed
+  6. All API requests include token as 'key' parameter
 
 ### Data Flow
-1. **ETL Process**: Fetches data from Syrve POS
-2. **Storage**: Saves to NDJSON files
-3. **Analytics**: Calculates KPIs and insights
-4. **API**: Serves processed data to Mini App
+
+**Real-time Request Flow (Mini App):**
+1. User opens Dashboard in Telegram Mini App
+2. Frontend calls `api.getDashboard()` with Telegram auth params
+3. Backend verifies Telegram authentication
+4. Backend checks user access (telegram_chat_id match)
+5. Backend reads pre-fetched data from NDJSON files
+6. Backend calculates KPIs and trends
+7. Returns dashboard data to frontend
+
+**ETL Background Process:**
+1. RQ Scheduler triggers ETL job (every 30 minutes)
+2. Worker creates SyrveClient with env credentials
+3. SyrveClient authenticates and gets session token
+4. Worker fetches sales data via OLAP API
+5. Processes and aggregates data by hour
+6. Saves to `sales_hour.ndjson`
+7. Generates insights and saves to `insights.ndjson`
 
 ### Frontend Components
 
@@ -174,10 +224,11 @@ TELEGRAM_BOT_TOKEN=your_bot_token
 
 # Syrve POS
 POS_TYPE=syrve
-SYRVE_SERVER_URL=https://api.syrve.com
-SYRVE_LOGIN=your_login
-SYRVE_PASSWORD=your_password
-SYRVE_STORE_ID=store_uuid
+SYRVE_SERVER_URL=https://restaurant.syrve.online  # Your Syrve instance
+SYRVE_LOGIN=your_api_username
+SYRVE_PASSWORD=your_api_password  # Will be SHA1 hashed
+SYRVE_STORE_ID=12345678-1234-1234-1234-123456789012  # Store UUID
+SYRVE_CONCEPTION_ID=87654321-4321-4321-4321-210987654321  # Optional
 ```
 
 **Frontend (.env)**:
@@ -243,6 +294,25 @@ git push origin main
 
 3. **Update Bot**:
 - Change Mini App URL in bot to: `https://ave-ai-dashboard.vercel.app`
+
+## 🚨 Critical Issues to Fix
+
+1. **Missing `mini_app.py` file**
+   - Contains `/api/v1/` endpoints for Mini App
+   - Has `get_current_user()` function imported by bot_endpoints.py
+   - Need to restore from git history (commit a093403)
+
+2. **Missing `get_pos_client()` implementation**
+   - Function is called but not implemented
+   - Should be in `/app/pos/__init__.py`
+   - Should return configured SyrveClient instance
+
+3. **401 Error Debugging**
+   - Need to distinguish between:
+     - Telegram auth failures (hash verification)
+     - Syrve auth failures (wrong credentials)
+     - User access failures (telegram_chat_id mismatch)
+   - Add better error messages and logging
 
 ## 🔮 Future Improvements
 
