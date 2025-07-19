@@ -282,8 +282,6 @@ export const api = {
     
     const url = getApiUrl('/bot/daily', authParams);
     console.log('Fetching daily report from:', url);
-    console.log('Hostname:', window.location.hostname);
-    console.log('Is Vercel:', window.location.hostname.includes('vercel.app'));
     
     const response = await fetch(url, {
       method: 'GET',

@@ -7,9 +7,8 @@ export const DebugPage = () => {
   const testDailyReport = async () => {
     setLogs(prev => [...prev, 'Testing daily report...']);
     try {
-      const isProxy = window.location.hostname.includes('vercel.app');
-      setLogs(prev => [...prev, `Using proxy: ${isProxy}`]);
-      setLogs(prev => [...prev, `Host: ${window.location.hostname}`]);
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+      setLogs(prev => [...prev, `API URL: ${apiUrl}`]);
       
       const data = await api.getDailyReport();
       setLogs(prev => [...prev, 'Success!', JSON.stringify(data, null, 2)]);
@@ -21,13 +20,8 @@ export const DebugPage = () => {
   const testHealthCheck = async () => {
     setLogs(prev => [...prev, 'Testing health check...']);
     try {
-      let url;
-      if (window.location.hostname.includes('vercel.app')) {
-        url = '/api/proxy?path=/health';
-      } else {
-        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-        url = `${apiUrl}/health`;
-      }
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+      const url = `${apiUrl}/health`;
       setLogs(prev => [...prev, `Health URL: ${url}`]);
       const response = await fetch(url);
       const data = await response.json();
